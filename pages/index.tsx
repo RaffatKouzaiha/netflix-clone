@@ -8,6 +8,17 @@ import Banner from "@/components/Banner";
 import { Movie } from "@/typings";
 import requests from "@/utils/requests";
 import Row from "@/components/Row";
+import useAuth from "@/hooks/useAuth";
+
+import {
+  RecoilRoot,
+  atom,
+  selector,
+  useRecoilState,
+  useRecoilValue,
+} from 'recoil';
+import { modalState } from "@/atoms/modalAtom";
+import Modal from "@/components/Modal";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -31,6 +42,12 @@ export default function Home({ netflixOriginals,
   topRated,
   trendingNow,
 }: Props) {
+
+  const {loading} = useAuth()
+  const showModal = useRecoilValue(modalState)
+  
+
+  if (loading) return null
   
   return (
     <div className="relative h-screen bg-gradient-to-b lg:h-[140vh]">
@@ -57,7 +74,7 @@ export default function Home({ netflixOriginals,
           <Row title="Documentaries" movies={documentaries} />
         </section>
       </main>
-      {/* Modal */}
+     {showModal && <Modal />}
     </div>
   );
 }
@@ -96,3 +113,4 @@ export const getServerSideProps = async () => {
     },
   }
 }
+
